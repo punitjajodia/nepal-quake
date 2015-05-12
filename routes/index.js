@@ -3,8 +3,7 @@ var router = express.Router();
 var tabletop = require('tabletop');
 var json2csv = require('json2csv');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/csv', function(req, res, next) {
 	tabletop.init( { key: '1FlFzSqdaQp9lEv4rALC6dND0JxJoDBFAyNE5K-1zdQc',
                    callback: function(incidents, tabletop) { 
 
@@ -17,6 +16,10 @@ router.get('/', function(req, res, next) {
                     },
                    simpleSheet: true } )
   // res.render('index', { title: 'Express' });
+});
+
+router.get('/', function(req, res, next) {
+   res.render('index', { title: 'Quakemap' });
 });
 
 module.exports = router;
