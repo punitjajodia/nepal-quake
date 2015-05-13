@@ -61,7 +61,7 @@ router.get('/autorefresh', function(req, res, next){
 				}).join(","));
 				columns = [];
 	    	}
-	    	res.send(rows.join("<br/>"));
+	    	res.send(rows.join("\n"));
 	    }
 	});
 
