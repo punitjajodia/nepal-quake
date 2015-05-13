@@ -55,7 +55,10 @@ router.get('/autorefresh', function(req, res, next){
 				columns.push(incident.locationname);
 				columns.push(incident.locationlatitude);
 				columns.push(incident.locationlongitude);
-				rows.push(columns.join(";"));
+				
+				rows.push(columns.map(function(column){
+					return '"' + column + '"';
+				}).join(","));
 				columns = [];
 	    	}
 	    	res.send(rows.join("<br/>"));
