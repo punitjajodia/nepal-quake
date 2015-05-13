@@ -34,6 +34,7 @@ quakemap.readableIncidentMode = function(incidentModeCode){
 
 quakemap.fields = [
   "incidentid",
+  "incidentlink",
   "incidenttitle",
   "incidentdescription",
   "incidentdate",
@@ -53,7 +54,8 @@ router.get('/autorefresh', function(req, res, next){
 	    	var readableIncidents = [];
 
 			for(var i=0; i<incidents.length; i++){
-				var incident = incidents[i].incident;		 	
+				var incident = incidents[i].incident;
+				incident.incidentlink = "http://quakemap.org/reports/view/" + incident.incidentid;		 	
 				incident.incidentmode = quakemap.readableIncidentMode(incident.incidentmode);
 				incident.incidentactive = incident.incidentactive?"YES":"NO";
 				incident.incidentverified = incident.incidentverified?"YES":"NO";
@@ -68,6 +70,14 @@ router.get('/autorefresh', function(req, res, next){
 						incident[customfield["field_name"]] = customfield["field_response"];
   					}
 				}
+
+				var comments = incidents[i].comments;
+				if(comments.length > 0) { console.warn("Found a comment");}
+		
+				// for(var j=comments.length; j>0; j--){
+				// 	var commentnumber = "Comment" + j;
+				// 	console.warn(commentnumber);
+				// }
 
 				readableIncidents.push(incident);
 
