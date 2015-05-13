@@ -32,36 +32,39 @@ quakemap.readableIncidentMode = function(incidentModeCode){
 	}
 };
 
+quakemap.fields = [
+  "incidentid",
+  "incidenttitle",
+  "incidentdescription",
+  "incidentdate",
+  "incidentmode", 
+  "incidentactive",
+  "incidentverified",
+  "locationname",
+  "locationlatitude",
+  "locationlongitude"
+  ];
+
 router.get('/autorefresh', function(req, res, next){
-	console.log(quakemap.readableIncidentMode(1));
-	
 	request('http://quakemap.org/api?task=incidents', function (error, response, body) {
 	    if (!error && response.statusCode == 200) {
 	    	var body = JSON.parse(body);
 	   
 	    	var incidents = body.payload.incidents;
-	    	var columns = [];
-	    	var rows = [];
+	    	var readableIncidents = [];
 
-			 for(var i=0; i<incidents.length; i++){
-			 	var incident = incidents[i].incident;
-			 	columns.push(incident.incidentid);
-			 	columns.push(incident.incidenttitle);
-				columns.push(incident.incidentdescription);
-				columns.push(incident.incidentdate);
-				columns.push(quakemap.readableIncidentMode(incident.incidentmode));
-				columns.push(incident.incidentactive?"YES":"NO");
-				columns.push(incident.incidentverified?"YES":"NO");
-				columns.push(incident.locationname);
-				columns.push(incident.locationlatitude);
-				columns.push(incident.locationlongitude);
-				
-				rows.push(columns.map(function(column){
-					return '"' + column + '"';
-				}).join(","));
-				columns = [];
+			for(var i=0; i<incidents.length; i++){
+				var incident = incidents[i].incident;		 	
+				incident.incidentmode = quakemap.readableIncidentMode(incident.incidentmode);
+				incident.incidentactive = incident.incidentactive?"YES":"NO";
+				incident.incidentverified = incident.incidentverified?"YES":"NO";
+				readableIncidents.push(incident);
 	    	}
-	    	res.send(rows.join("\n"));
+
+	    	json2csv({ data: readableIncidents, fields: quakemap.fields}, function(err, csv) {
+			  if (err) console.log(err);
+			  res.send(csv);
+			});
 	    }
 	});
 
