@@ -49,7 +49,6 @@ router.get('/autorefresh', function(req, res, next){
 	request('http://quakemap.org/api?task=incidents', function (error, response, body) {
 	    if (!error && response.statusCode == 200) {
 	    	var body = JSON.parse(body);
-	   
 	    	var incidents = body.payload.incidents;
 	    	var readableIncidents = [];
 
@@ -58,7 +57,20 @@ router.get('/autorefresh', function(req, res, next){
 				incident.incidentmode = quakemap.readableIncidentMode(incident.incidentmode);
 				incident.incidentactive = incident.incidentactive?"YES":"NO";
 				incident.incidentverified = incident.incidentverified?"YES":"NO";
+
+				var customfields = incidents[i].customfields;
+				for(key in customfields){
+					if (customfields.hasOwnProperty(key)) {
+   						var customfield = customfields[key];
+   						if(quakemap.fields.indexOf(customfield["field_name"]) == -1) {
+							quakemap.fields.push(customfield["field_name"]);
+						}
+						incident[customfield["field_name"]] = customfield["field_response"];
+  					}
+				}
+
 				readableIncidents.push(incident);
+
 	    	}
 
 	    	json2csv({ data: readableIncidents, fields: quakemap.fields}, function(err, csv) {
