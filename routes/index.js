@@ -115,6 +115,8 @@ quakemap.csvFields = [
 "COMMENT"
 ];
 
+quakemap.csvOutputFields = JSON.parse(JSON.stringify(quakemap.csvFields));
+quakemap.csvOutputFields[0] = "ID";
 
 router.get('/csv-fixed', function(req, res, next){
 	var dataPath = path.join(__dirname, '../public', 'quakemap-data.csv');
@@ -124,7 +126,7 @@ router.get('/csv-fixed', function(req, res, next){
 
 	//end_parsed will be emitted once parsing finished
 	csvConverter.on("end_parsed",function(jsonObj){
-	    json2csv({ data: jsonObj, fields : quakemap.csvFields}, function(err, csv) {
+	    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
 						  if (err) console.log(err);
 						  	res.set('Content-Type', 'text/csv');
 							res.send(csv);
@@ -134,7 +136,6 @@ router.get('/csv-fixed', function(req, res, next){
 	//read from file
 	fs.createReadStream(dataPath).pipe(csvConverter);
 });
-
 
 
 router.get('/', function(req, res, next) {
