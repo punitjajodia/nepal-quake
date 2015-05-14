@@ -97,6 +97,7 @@ router.get('/autorefresh', function(req, res, next){
 
 quakemap.csvFields = [
 "",
+"INCIDENT LINK",
 "INCIDENT TITLE",
 "INCIDENT DATE",
 "LOCATION",
@@ -143,6 +144,10 @@ router.get('/refresh', function(req, res){
 
 			//end_parsed will be emitted once parsing finished
 			csvConverter.on("end_parsed",function(jsonObj){
+				for(var i=0, len=jsonObj.length; i<len; i++){
+					var report = jsonObj[i];
+					report["INCIDENT LINK"] = "http://quakemap.org/reports/view/" + report[""];
+				}
 				//res.send(JSON.stringify(jsonObj, null, '\t'));
 			    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
 					  	fs.writeFile(quakemap.goodCSV, csv, function(err) {
