@@ -96,7 +96,7 @@ router.get('/autorefresh', function(req, res, next){
 });
 
 quakemap.csvFields = [
-"#",
+"",
 "INCIDENT TITLE",
 "INCIDENT DATE",
 "LOCATION",
@@ -143,6 +143,7 @@ router.get('/refresh', function(req, res){
 
 			//end_parsed will be emitted once parsing finished
 			csvConverter.on("end_parsed",function(jsonObj){
+				//res.send(JSON.stringify(jsonObj, null, '\t'));
 			    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
 					  	fs.writeFile(quakemap.goodCSV, csv, function(err) {
 			    			res.send("Data refreshed successfully");
