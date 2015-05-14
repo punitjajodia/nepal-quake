@@ -132,7 +132,7 @@ quakemap.fixCSV = function(){
 						  if (err){
 						  	return console.log(err);
 						  } else {
-						  	fs.writeFile(quakemap.goodCSV, body, function(err) {
+						  	fs.writeFile(quakemap.goodCSV, csv, function(err) {
 				    			if(err) {
 				        			console.log(err);
 				    			}
