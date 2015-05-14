@@ -3,6 +3,12 @@ var router = express.Router();
 var tabletop = require('tabletop');
 var json2csv = require('json2csv');
 var request = require('request');
+var csv = require('csv');
+var fs = require('fs');
+var path = require('path');
+//Converter Class
+var Converter=require("csvtojson").core.Converter;
+
 
 router.get('/csv', function(req, res, next) {
 	tabletop.init( { key: '1FlFzSqdaQp9lEv4rALC6dND0JxJoDBFAyNE5K-1zdQc',
@@ -73,11 +79,6 @@ router.get('/autorefresh', function(req, res, next){
 
 				var comments = incidents[i].comments;
 				if(comments.length > 0) { console.warn("Found a comment");}
-		
-				// for(var j=comments.length; j>0; j--){
-				// 	var commentnumber = "Comment" + j;
-				// 	console.warn(commentnumber);
-				// }
 
 				readableIncidents.push(incident);
 
@@ -90,7 +91,51 @@ router.get('/autorefresh', function(req, res, next){
 	    }
 	});
 
-}); 
+});
+
+quakemap.csvFields = [
+"",
+"INCIDENT TITLE",
+"INCIDENT DATE",
+"DESCRIPTION",
+"CATEGORY",
+"LATITUDE",
+"LONGITUDE",
+"Phone Number",
+"Most Affected District",
+"Location Accuracy - the report is from in this",
+"FIRST NAME",
+"LAST NAME",
+"EMAIL",
+"APPROVED",
+"VERIFIED",
+"ACTIONABLE",
+"ACTION TAKEN",
+"ACTION SUMMARY",
+"COMMENT"
+];
+
+
+router.get('/csv-fixed', function(req, res, next){
+	var dataPath = path.join(__dirname, '../public', 'quakemap-data.csv');
+	
+	//new converter instance
+	var csvConverter=new Converter();
+
+	//end_parsed will be emitted once parsing finished
+	csvConverter.on("end_parsed",function(jsonObj){
+	    json2csv({ data: jsonObj, fields : quakemap.csvFields}, function(err, csv) {
+						  if (err) console.log(err);
+						  	res.set('Content-Type', 'text/csv');
+							res.send(csv);
+				});
+	});
+
+	//read from file
+	fs.createReadStream(dataPath).pipe(csvConverter);
+});
+
+
 
 router.get('/', function(req, res, next) {
    res.render('index', { title: 'Quakemap' });
