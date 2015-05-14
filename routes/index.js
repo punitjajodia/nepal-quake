@@ -117,24 +117,72 @@ quakemap.csvFields = [
 
 quakemap.csvOutputFields = JSON.parse(JSON.stringify(quakemap.csvFields));
 quakemap.csvOutputFields[0] = "ID";
+quakemap.badCSV = path.join(__dirname, '../public', 'quakemap-data.csv'); 
+quakemap.goodCSV = path.join(__dirname, '../public', 'quakemap-data-cleaned.csv');
 
-router.get('/csv-fixed', function(req, res, next){
-	var dataPath = path.join(__dirname, '../public', 'quakemap-data.csv');
-	
+quakemap.csvFromFile = function(){
+
 	//new converter instance
 	var csvConverter=new Converter();
 
 	//end_parsed will be emitted once parsing finished
 	csvConverter.on("end_parsed",function(jsonObj){
 	    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
-						  if (err) console.log(err);
-						  	res.set('Content-Type', 'text/csv');
-							res.send(csv);
+						  if (err){ 
+						  	return console.log(err);
+						  }
+						  return csv;
+						  
+				});
+	});
+	//read from file
+	fs.createReadStream(quakemap.dataPath).pipe(csvConverter);
+};
+
+
+// Reads the bad CSV location, fixes it and writes it to the good CSV location
+quakemap.fixCSV = function(){
+	//new converter instance
+	var csvConverter=new Converter();
+
+	//end_parsed will be emitted once parsing finished
+	csvConverter.on("end_parsed",function(jsonObj){
+	    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
+						  if (err){
+						  	return console.log(err);
+						  } else {
+						  	fs.writeFile(quakemap.goodCSV, body, function(err) {
+				    			if(err) {
+				        			console.log(err);
+				    			}
+							});
+							res.sendFile("Data refreshed");
+						  }
 				});
 	});
 
 	//read from file
-	fs.createReadStream(dataPath).pipe(csvConverter);
+	fs.createReadStream(badCSV).pipe(csvConverter);
+}
+
+router.get('/refresh', function(req, res){
+	request('http://quakemap.org/index.php/export_reports/index/csv', function (error, response, body) {
+	 	
+	     if (!error && response.statusCode == 200) {
+	     	res.send(body);
+	 //    	console.log("Got data from the server");
+	 //    	//update file
+	 //    	fs.writeFile(quakemap.badCSV, body, function(err) {
+	 //    		console.log("Wrote to bad CSV");
+  //   			quakemap.fixCSV();
+  //   			console.log("Fixed bad csv");
+		// 	});
+		 }
+});
+});
+
+router.get('/csv-fixed', function(req, res, next){
+	res.sendFile(quakemap.goodCSV);
 });
 
 
