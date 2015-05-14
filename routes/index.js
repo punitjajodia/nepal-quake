@@ -99,6 +99,7 @@ quakemap.csvFields = [
 "",
 "INCIDENT TITLE",
 "INCIDENT DATE",
+"LOCATION",
 "DESCRIPTION",
 "CATEGORY",
 "LATITUDE",
@@ -106,13 +107,20 @@ quakemap.csvFields = [
 "Phone Number",
 "Most Affected District",
 "Location Accuracy - the report is from in this",
-"FIRST NAME",
+"For Approval or Status Adjustment",
+"Dispatch Status - Quakemap.org team has contacted an organization and they have agreed to respond to this report",
+"Dispatched organization capacity",
+"Closed Status - nothing more needed from quakemap.org team",
+"Number of times contact attempted",
+"Number of times reached",
+"Location accuracy checked or fixed by",
+"FIRST NAME",	
 "LAST NAME",
 "EMAIL",
 "APPROVED",
-"VERIFIED",
+"VERIFIED",	
 "ACTIONABLE",
-"ACTION TAKEN",
+"ACTION TAKEN",	
 "ACTION SUMMARY",
 "COMMENT"
 ];
@@ -125,10 +133,8 @@ quakemap.csvImportUrl = "http://quakemap.org/index.php/export_reports/index/csv/
 
 // Reads the bad CSV location, fixes it and writes it to the good CSV location
 quakemap.fixCSV = function(){
-	//new converter instance
-	
+	//new converter instance	
 };
-
 
 router.get('/refresh', function(req, res){
 			var csvConverter=new Converter();
@@ -145,7 +151,6 @@ router.get('/refresh', function(req, res){
 			});
 });
 
-	
 	//  request('http://quakemap.org/index.php/export_reports/index/csv/', function (error, response, body) {
 				
 	//       if (!error && response.statusCode == 200) {
