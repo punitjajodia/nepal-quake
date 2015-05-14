@@ -96,7 +96,7 @@ router.get('/autorefresh', function(req, res, next){
 });
 
 quakemap.csvFields = [
-"",
+"#",
 "INCIDENT TITLE",
 "INCIDENT DATE",
 "LOCATION",
