@@ -8,7 +8,9 @@ var fs = require('fs');
 var path = require('path');
 //Converter Class
 var Converter=require("csvtojson").core.Converter;
-
+var exec = require('child_process').exec;
+var http = require('http');
+var wget = require('wget');
 
 router.get('/csv', function(req, res, next) {
 	tabletop.init( { key: '1FlFzSqdaQp9lEv4rALC6dND0JxJoDBFAyNE5K-1zdQc',
@@ -119,34 +121,31 @@ quakemap.csvOutputFields = JSON.parse(JSON.stringify(quakemap.csvFields));
 quakemap.csvOutputFields[0] = "ID";
 quakemap.badCSV = path.join(__dirname, '../public', 'quakemap-data.csv'); 
 quakemap.goodCSV = path.join(__dirname, '../public', 'quakemap-data-cleaned.csv');
-
+quakemap.csvImportUrl = "http://quakemap.org/index.php/export_reports/index/csv/";
 
 // Reads the bad CSV location, fixes it and writes it to the good CSV location
 quakemap.fixCSV = function(){
 	//new converter instance
-	var csvConverter=new Converter();
-
-	//end_parsed will be emitted once parsing finished
-	csvConverter.on("end_parsed",function(jsonObj){
-	    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
-						  if (err){
-						  	return console.log(err);
-						  } else {
-						  	fs.writeFile(quakemap.goodCSV, csv, function(err) {
-				    			if(err) {
-				        			console.log(err);
-				    			}
-							});
-						  }
-				});
-	});
-
-	//read from file
-	fs.createReadStream(quakemap.badCSV).pipe(csvConverter);
+	
 };
 
+
 router.get('/refresh', function(req, res){
-	quakemap.fixCSV();
+			var csvConverter=new Converter();
+			//read from file
+			fs.createReadStream(quakemap.badCSV).pipe(csvConverter);
+
+			//end_parsed will be emitted once parsing finished
+			csvConverter.on("end_parsed",function(jsonObj){
+			    json2csv({ data: jsonObj, fields : quakemap.csvFields, fieldNames: quakemap.csvOutputFields}, function(err, csv) {
+					  	fs.writeFile(quakemap.goodCSV, csv, function(err) {
+			    			res.send("Data refreshed successfully");
+						});				  
+				});
+			});
+});
+
+	
 	//  request('http://quakemap.org/index.php/export_reports/index/csv/', function (error, response, body) {
 				
 	//       if (!error && response.statusCode == 200) {
@@ -165,11 +164,25 @@ router.get('/refresh', function(req, res){
 	// // 	// 	});
 	// // 	 }
 	//  });
-});
+
 
 router.get('/csv-fixed', function(req, res, next){
 	res.sendFile(quakemap.goodCSV);
 });
+
+
+// router.get('/wget', function(req, res){
+	
+// 	download.on('error', function(err) {
+// 	    console.log(err);
+// 	});
+// 	download.on('end', function(output) {
+// 	    res.send("Downloaded!");
+// 	});
+// 	download.on('progress', function(progress) {
+// 	    // code to show progress bar
+// 	});
+// });
 
 router.get('/', function(req, res, next) {
    res.render('index', { title: 'Quakemap' });
