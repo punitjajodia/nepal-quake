@@ -137,14 +137,13 @@ quakemap.fixCSV = function(){
 				        			console.log(err);
 				    			}
 							});
-							res.sendFile("Data refreshed");
 						  }
 				});
 	});
 
 	//read from file
 	fs.createReadStream(quakemap.badCSV).pipe(csvConverter);
-}
+};
 
 router.get('/refresh', function(req, res){
 	quakemap.fixCSV();
