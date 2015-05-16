@@ -1,8 +1,39 @@
 body {
+  background-color: #FFFAFA;
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.title {
+	font-size: 1.5em;
+	background-color: #BFAAAA;
+	color:#FFFAFA;
+	padding: 10px;
+}
+
+.report {
+	background-color: #efefef;
+	padding: 10px 10px 40px 10px;
+	margin-bottom: 20px;
+	clear:both;
+}
+
+.column {
+	margin: 10px;
+	clear:both;
+}
+
+.report .column .label{
+	width: 100px;
+	float: left;
+}
+
+.report .column .value {
+	color: #785A5A;
+	width: 600px;
+	float: left;
 }

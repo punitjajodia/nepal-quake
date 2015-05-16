@@ -11,6 +11,8 @@ var Converter=require("csvtojson").core.Converter;
 var exec = require('child_process').exec;
 var http = require('http');
 var wget = require('wget');
+var winston = require('winston');
+winston.level = 'debug';
 
 router.get('/csv', function(req, res, next) {
 	tabletop.init( { key: '1FlFzSqdaQp9lEv4rALC6dND0JxJoDBFAyNE5K-1zdQc',
@@ -126,6 +128,17 @@ quakemap.csvFields = [
 "COMMENT"
 ];
 
+quakemap.filterHelpText = "Click to apply filter";
+
+quakemap.filters = {
+	"Most Affected District" : [quakemap.filterHelpText],
+	"Location Accuracy - the report is from in this" : [quakemap.filterHelpText],
+	"APPROVED" : [quakemap.filterHelpText],
+	"VERIFIED" : [quakemap.filterHelpText],
+	"ACTIONABLE" : [quakemap.filterHelpText],
+	"ACTION TAKEN" : [quakemap.filterHelpText]
+};
+
 quakemap.csvOutputFields = JSON.parse(JSON.stringify(quakemap.csvFields));
 quakemap.csvOutputFields[0] = "ID";
 quakemap.badCSV = path.join(__dirname, '../public', 'quakemap-data.csv'); 
@@ -198,5 +211,43 @@ router.get('/csv-fixed', function(req, res, next){
 router.get('/', function(req, res, next) {
    res.render('index', { title: 'Quakemap' });
 });
+
+
+router.get('/reports', function(req, res){
+	fs.readFile(quakemap.goodCSV, 'utf8', function(err, data){
+		var csvConverter=new Converter();
+			//read from file
+		fs.createReadStream(quakemap.goodCSV).pipe(csvConverter);
+		//end_parsed will be emitted once parsing finished
+		csvConverter.on("end_parsed",function(jsonObj){
+
+			for(var i=0, len=jsonObj.length; i<len; i++){
+					var report = jsonObj[i];
+					report["INCIDENT DESCRIPTION"] = unescape(report["INCIDENT DESCRIPTION"]);
+
+					//Add the unique values to the filters
+					for(filter in quakemap.filters) {
+						if(quakemap.filters[filter].indexOf(report[filter])==-1){
+							quakemap.filters[filter].push(report[filter]);		 
+						}
+					}
+			}
+
+			//Loop through filters
+			for(var field in req.query){
+				if(quakemap.csvOutputFields.indexOf(field) !== -1 && 
+					req.query[field]!=quakemap.filterHelpText){
+					//filter the json data
+					jsonObj = jsonObj.filter(function(report) {
+						return report[field] == req.query[field];
+					});
+				}
+			}
+			//res.send(filters);
+			res.render('reports', {title: "Reports", reports: jsonObj, filters: quakemap.filters});		
+		});	
+	});
+});
+
 
 module.exports = router;

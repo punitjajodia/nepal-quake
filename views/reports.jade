@@ -1,0 +1,48 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to #{title}
+	form#filters(method="get")
+		each filter,key in filters
+			div.filtergroup #{key}
+			select(name=key)
+				each option in filter
+					option #{option}
+		input(type="submit")
+
+	div.reports
+		each val in reports
+			div.report
+				div.title #{val["INCIDENT TITLE"]}
+				div.column
+					div.label LINK
+					div.value #{val["INCIDENT LINK"]}
+				div.column
+					div.label PHONE NUMBER
+					div.value #{val["Phone Number"]}
+				div.column
+					div.label DISTRICT
+					div.value #{val["Most Affected District"]}
+				div.column
+					div.label DESCRIPTION
+					div.value #{val["DESCRIPTION"]}
+				div.column
+					div.label LOCATION ACCURACY
+					div.value #{val["Location Accuracy - the report is from in this"]}
+				div.column
+					div.label APPROVED
+					div.value #{val["APPROVED"]}
+				div.column
+					div.label VERIFIED
+					div.value #{val["VERIFIED"]}
+				div.column
+					div.label CATEGORY
+					div.value #{val["CATEGORY"]}
+				div.column
+					div.label ACTIONABLE
+					div.value #{val["ACTIONABLE"]}
+				div.column
+					div.label COMMENT
+					div.value #{val["COMMENT"]}
+
