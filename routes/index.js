@@ -241,7 +241,11 @@ router.get('/reports', function(req, res){
 
 			for(var i=0, len=jsonObj.length; i<len; i++){
 					var report = jsonObj[i];
-					report["DESCRIPTION"] = report["DESCRIPTION"].replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,"'");
+					report["DESCRIPTION"] = report["DESCRIPTION"].replace(/&lt;/g, "<")
+																.replace(/&gt;/g, ">")
+																.replace(/&quot;/g,"'")
+																.replace(/\\n/g, "<br/>")
+																.replace(/\\t/g, "&nbsp;&nbsp;");
 				//	report["INCIDENT DESCRIPTION"] = report["INCIDENT DESCRIPTION"].replace("Facebook", 'Twitter');
 					//Add the unique values to the filters
 					for(filter in quakemap.filters) {
