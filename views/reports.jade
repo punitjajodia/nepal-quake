@@ -2,7 +2,7 @@ extends layout
 
 block content
 	h1= title
-	p Welcome to #{title}
+	p Welcome to Quakemap.org printable reports (beta). Please filter reports according to the criteria below. If you need more finely tuned criteria for your list of reports, you can still use our XML export plug-in on the <a href="http://quakemap.org/reports">reports</a> page, .  Those exports will need to be unzipped and opened in Microsoft Internet Explorer before printing.
 	form#filters(method="get")
 		each filter,key in filters
 			div.filtergroup #{key}
