@@ -131,12 +131,30 @@ quakemap.csvFields = [
 quakemap.filterHelpText = "Click to apply filter";
 
 quakemap.filters = {
-	"Most Affected District" : [quakemap.filterHelpText],
-	"Location Accuracy - the report is from in this" : [quakemap.filterHelpText],
-	"APPROVED" : [quakemap.filterHelpText],
-	"VERIFIED" : [quakemap.filterHelpText],
-	"ACTIONABLE" : [quakemap.filterHelpText],
-	"ACTION TAKEN" : [quakemap.filterHelpText]
+	"Most Affected District" : {
+		selected: quakemap.filterHelpText, 
+		choices: [quakemap.filterHelpText]
+	},
+	"Location Accuracy - the report is from in this" : {
+		selected: quakemap.filterHelpText, 
+		choices: [quakemap.filterHelpText]
+	},
+	"APPROVED" : {
+		selected: quakemap.filterHelpText, 
+		choices: [quakemap.filterHelpText]
+	},
+	"VERIFIED" : {
+		selected: quakemap.filterHelpText, 
+		choices: [quakemap.filterHelpText]
+	},
+	"ACTIONABLE" : {
+		selected: quakemap.filterHelpText, 
+		choices: [quakemap.filterHelpText]
+	},
+	"ACTION TAKEN" : {
+		selected: quakemap.filterHelpText, 
+		choices: [quakemap.filterHelpText]
+	}
 };
 
 quakemap.csvOutputFields = JSON.parse(JSON.stringify(quakemap.csvFields));
@@ -223,12 +241,12 @@ router.get('/reports', function(req, res){
 
 			for(var i=0, len=jsonObj.length; i<len; i++){
 					var report = jsonObj[i];
-					report["INCIDENT DESCRIPTION"] = unescape(report["INCIDENT DESCRIPTION"]);
-
+					report["DESCRIPTION"] = report["DESCRIPTION"].replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,"'");
+				//	report["INCIDENT DESCRIPTION"] = report["INCIDENT DESCRIPTION"].replace("Facebook", 'Twitter');
 					//Add the unique values to the filters
 					for(filter in quakemap.filters) {
-						if(quakemap.filters[filter].indexOf(report[filter])==-1){
-							quakemap.filters[filter].push(report[filter]);		 
+						if(quakemap.filters[filter].choices.indexOf(report[filter])==-1){
+							quakemap.filters[filter].choices.push(report[filter]);		 
 						}
 					}
 			}
@@ -237,6 +255,8 @@ router.get('/reports', function(req, res){
 			for(var field in req.query){
 				if(quakemap.csvOutputFields.indexOf(field) !== -1 && 
 					req.query[field]!=quakemap.filterHelpText){
+
+					quakemap.filters[field].selected = req.query[field];
 					//filter the json data
 					jsonObj = jsonObj.filter(function(report) {
 						return report[field] == req.query[field];
@@ -248,6 +268,5 @@ router.get('/reports', function(req, res){
 		});	
 	});
 });
-
 
 module.exports = router;

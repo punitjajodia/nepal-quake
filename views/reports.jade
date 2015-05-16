@@ -7,8 +7,11 @@ block content
 		each filter,key in filters
 			div.filtergroup #{key}
 			select(name=key)
-				each option in filter
-					option #{option}
+				each option in filter.choices
+					if option == filter.selected
+						option(selected="selected") #{option}
+					else
+						option #{option}
 		input(type="submit")
 
 	div.reports
@@ -26,7 +29,7 @@ block content
 					div.value #{val["Most Affected District"]}
 				div.column
 					div.label DESCRIPTION
-					div.value #{val["DESCRIPTION"]}
+					div.value!= val["DESCRIPTION"]
 				div.column
 					div.label LOCATION ACCURACY
 					div.value #{val["Location Accuracy - the report is from in this"]}
