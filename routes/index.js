@@ -268,7 +268,7 @@ router.get('/reports', function(req, res){
 				}
 			}
 			//res.send(filters);
-			res.render('reports', {title: "Reports", reports: jsonObj, filters: quakemap.filters});		
+			res.render('reports', {title: "Quakemap Printable Reports", reports: jsonObj, filters: quakemap.filters});		
 		});	
 	});
 });

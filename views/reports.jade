@@ -2,17 +2,56 @@ extends layout
 
 block content
 	h1= title
-	p Welcome to Quakemap.org printable reports (beta). Please filter reports according to the criteria below. If you need more finely tuned criteria for your list of reports, you can still use our XML export plug-in on the <a href="http://quakemap.org/reports">reports</a> page, .  Those exports will need to be unzipped and opened in Microsoft Internet Explorer before printing.
-	form#filters(method="get")
-		each filter,key in filters
-			div.filtergroup #{key}
-			select(name=key)
-				each option in filter.choices
-					if option == filter.selected
-						option(selected="selected") #{option}
-					else
-						option #{option}
-		input(type="submit")
+	h3 Press Ctrl+P to Print
+	div#accordion
+		h2 ABOUT QUAKEMAP.ORG
+		div.
+			<p>
+			The April 2015 Nepal earthquake killed more than 8,000 people and injured more than 19,000. It occurred at 11:56 NST on 25 April, with a magnitude of 7.8Mw.
+			</p>
+			<p>
+			Quakemap.org was formed to create a database of earthquake incident reports and help connect relief organizations to people in need of help. 
+			</p>
+			<p>
+			It currently contains more than 1700 reports and many organizations, including the Nepal Army are using them to co-ordinate their relief efforts. Humanity Road(humanityroad.org) is providing surge support to help with rapid processing of incident reports on Quakemap.
+			</p>
+
+			<p>
+			The quakemap team has deployed the following tools to help volunteers find out where help is most needed.</p>
+			<ol><li>
+			<p>http://quakemap.org</p>
+			<p>Users can submit reports,  add updates in the comments.  Visit the about page  http://quakemap.org/page/index/1 to learn more.
+			</p></li> 
+
+			<li><p>http://bit.ly/quakemap-org</p>
+			<p>Auto-refreshing excel sheet that is filterable by district, that pulls data from quakemap.org every hour</p></li>
+
+			<li><p>http://bit.ly/quakemap-print</p>
+			<p>Quakemap.org reports, filterable by district,  in a print friendly format,  updated hourly</p>
+			</li>
+			</ol>
+
+		h2 DIRECTIONS FOR USE
+		div.
+			<ol>
+			<li>If you see a report that requires immediate attention, inform the relevant authorities immediately http://nepalpolice.gov.np/emergency-number.html</li>
+
+			<li>Make sure you read the comments where we are putting updates after verifying the reports.</li>
+
+			<li>Call the phone number mentioned in the report to make sure the need is still there before acting on a Report or confirm from the CDO or other agencies if contact cannot be made</li>
+
+			<li>After you have dispatched a team,  navigate to the report on quakemap.org and write a descriptive comment about the dispatch.  A dedicated team is reading these comments and closing reports based on them.</li></ol>
+		h2 APPLY FILTERS
+		form#filters(method="get")
+			each filter,key in filters
+				div.filtergroup #{key}
+				select(name=key)
+					each option in filter.choices
+						if option == filter.selected
+							option(selected="selected") #{option}
+						else
+							option #{option}
+			input(type="submit")
 
 	div.reports
 		each val in reports
