@@ -3,6 +3,16 @@ extends layout
 block content
 	h1= title
 	h3 Press Ctrl+P to Print
+	h2 DIRECTIONS FOR USE
+	div.
+		<ol>
+		<li>If you are able to verify that a report requires immediate attention, inform the <a href="http://nepalpolice.gov.np/emergency-number.html">relevant authorities</a> immediately </li>
+
+		<li>Make sure you read the comments where we are putting updates after verifying the reports.</li>
+
+		<li>Call the phone number mentioned in the report to make sure the need is still there before acting on a Report or confirm from the <a href="http://drrportal.gov.np/uploads/news/8.pdf">CDO</a> or other agencies if contact cannot be made</li>
+
+		<li>After you have dispatched a team,  navigate to the report on quakemap.org and write a descriptive comment about the dispatch.  A dedicated team is reading these comments and closing reports based on them.</li></ol>
 	div#accordion
 		h2 ABOUT QUAKEMAP.ORG
 		div.
@@ -30,17 +40,6 @@ block content
 			<p>Quakemap.org reports, filterable by district,  in a print friendly format,  updated hourly</p>
 			</li>
 			</ol>
-
-		h2 DIRECTIONS FOR USE
-		div.
-			<ol>
-			<li>If you see a report that requires immediate attention, inform the relevant authorities immediately http://nepalpolice.gov.np/emergency-number.html</li>
-
-			<li>Make sure you read the comments where we are putting updates after verifying the reports.</li>
-
-			<li>Call the phone number mentioned in the report to make sure the need is still there before acting on a Report or confirm from the CDO or other agencies if contact cannot be made</li>
-
-			<li>After you have dispatched a team,  navigate to the report on quakemap.org and write a descriptive comment about the dispatch.  A dedicated team is reading these comments and closing reports based on them.</li></ol>
 		h2 APPLY FILTERS
 		form#filters(method="get")
 			each filter,key in filters
