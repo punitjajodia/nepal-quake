@@ -1,7 +1,11 @@
 body {
   background-color: #FFFAFA;
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 95%;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+
 }
 
 a {
@@ -34,6 +38,5 @@ a {
 
 .report .column .value {
 	color: #785A5A;
-	width: 600px;
 	float: left;
 }
