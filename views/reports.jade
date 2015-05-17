@@ -56,7 +56,8 @@ block content
 	div.reports
 		each val in reports
 			div.report
-				div.title #{val["INCIDENT TITLE"]}
+				div.title 
+					a(href=val["INCIDENT LINK"]) #{val["INCIDENT TITLE"]}
 				div.column
 					div.label LINK
 					div.value #{val["INCIDENT LINK"]}
