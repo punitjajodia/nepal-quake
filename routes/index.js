@@ -67,8 +67,9 @@ router.get('/autorefresh', function(req, res, next){
 				var incident = incidents[i].incident;
 				incident.incidentlink = "http://quakemap.org/reports/view/" + incident.incidentid;		 	
 				incident.incidentmode = quakemap.readableIncidentMode(incident.incidentmode);
-				incident.incidentactive = incident.incidentactive?"YES":"NO";
-				incident.incidentverified = incident.incidentverified?"YES":"NO";
+				incident.incidentactive = parseInt(incident.incidentactive)?"YES":"NO";
+
+				incident.incidentverified = parseInt(incident.incidentverified)?"YES":"NO";
 
 				var customfields = incidents[i].customfields;
 				for(key in customfields){
