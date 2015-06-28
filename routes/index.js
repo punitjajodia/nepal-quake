@@ -125,6 +125,8 @@ quakemap.csvFields = [
 "VERIFIED",	
 "ACTIONABLE",
 "ACTION TAKEN",	
+"URGENT",
+"CLOSED",
 "ACTION SUMMARY",
 "COMMENT"
 ];
