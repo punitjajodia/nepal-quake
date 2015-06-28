@@ -110,6 +110,7 @@ quakemap.csvFields = [
 "LONGITUDE",
 "Phone Number",
 "Most Affected District",
+"VDC",
 "Location Accuracy - the report is from in this",
 "For Approval or Status Adjustment",
 "Dispatch Status - Quakemap.org team has contacted an organization and they have agreed to respond to this report",
