@@ -129,7 +129,8 @@ quakemap.csvFields = [
 "URGENT",
 "CLOSED",
 "ACTION SUMMARY",
-"COMMENT"
+"COMMENT",
+"COMMENT DATE"
 ];
 
 quakemap.filterHelpText = "Click to apply filter";
